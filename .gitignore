@@ -1,1 +1,7 @@
+*.dSYM
+*.sw*
+*.a
 *.o
+*.out
+.DS_Store
+.vscode
