@@ -22,29 +22,19 @@ void	mem_create(void **addr, int fit, size_t size)
 		return ;
 }
 
-void	mem_insert(void **addr, int fit, size_t size)
-{
-	
-}
-
-void	*mem_find(int fit, size_t size)
-{
-	if (!g_memroot[fit])
-		return (NULL);
-	return (0x1);
-}
-
 void	*malloc(size_t size)
 {
-	void	*addr;
-	int		fit;
-
-	addr = NULL;
-	fit = get_fitname(size);
-	if (!mem_find(fit, size))
-		mem_create(&addr, fit, size); 
-	else
-		mem_insert(&addr, fit, size);
-	mem_update(addr, fit);
-	return (addr);
+	if (size > MALLOC_MAX_SIZE)
+		return (NULL);
+	/* 	minit_alloc(&struct)
+			int		fitname;
+			fitname = get_fitname(size);
+			init this lol
+		if (struct.find())
+			struct.create()
+		? struct.insert()
+		struct.update()
+		return struct.new_alloc	
+	*/
+	return (new_alloc);
 }
