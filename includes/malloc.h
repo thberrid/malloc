@@ -19,12 +19,16 @@
 
 # define BITMAP_LEN	1024
 
-# define TINY		0
-# define SMALL		1
-# define LARGE		2
+# define M_DEBUG	1
 
-# define MALLOC_MAX_SIZE 10000
+# define TINY_ID	0
+# define SMALL_ID	1
+# define LARGE_ID	2
+# define TINY_NAME	"TINY"
+# define SMALL_NAME	"SMALL"
+# define LARGE_NAME	"LARGE"
 
+# define MALLOC_MAX_SIZE 1000000000000000
 
 typedef struct		s_chunkdata
 {
@@ -32,29 +36,25 @@ typedef struct		s_chunkdata
 	struct s_chunkdata	*next;
 }					t_chunkdata;
 
-typedef struct		s_metadata
+typedef struct		s_arenadata
 {
 	size_t				len;
 	struct s_metadata	*next;
 	struct s_chunkdata	*free;
 	struct s_chunkdata	*chunk;
-}					t_metadata;
+}					t_arenadata;
 
-extern t_metadata	*g_mroot[3];
+extern t_arenadata	*g_mroot[3];
 
 void			*malloc(size_t size);
+void			show_alloc_mem(void);
 
-int				get_fitname(size_t size);
-
-void			minsert(void **addr, int fit, size_t size);
-void			mcreate(void **addr, int fit, size_t size);
-void			*mfind(int fit, size_t size);
-
+int		arena_create(t_arenadata **arena, t_chunkdata **chunk, int fitid);
+int		mfind(t_arenadata **arena, t_chunkdata **chunk, size_t size);
 /*
 void	free(void *ptr);
 
 void	*realloc(void *ptr, size_t size);
-void	show_alloc_mem();
 	
 
 *		block large
