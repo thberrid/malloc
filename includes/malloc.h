@@ -25,35 +25,30 @@
 
 # define MALLOC_MAX_SIZE 10000
 
-typedef struct	s_metadata {
-	size_t				len;
-	struct s_metadata	*prev;
-	struct s_metadata	*next;
-}				t_metadata;
 
-typedef struct	s_tinydata {
-	size_t				len;
-	unsigned char		bitmap[BITMAP_LEN];
-	struct s_tinydata 	*prev;
-	struct s_tinydata 	*next;
-}				t_tinydata;
-
-extern void		*g_memroot[3];
-
-typedef struct	t_alloc_data
+typedef struct		s_chunkdata
 {
-	int		fit;
-		
-}				t_alloc_data;
+	size_t				len;
+	struct s_chunkdata	*next;
+}					t_chunkdata;
 
+typedef struct		s_metadata
+{
+	size_t				len;
+	struct s_metadata	*next;
+	struct s_chunkdata	*free;
+	struct s_chunkdata	*chunk;
+}					t_metadata;
+
+extern t_metadata	*g_mroot[3];
 
 void			*malloc(size_t size);
 
 int				get_fitname(size_t size);
 
-void			mem_insert(void **addr, int fit, size_t size);
-void			mem_create(void **addr, int fit, size_t size);
-void			*mem_find(int fit, size_t size);
+void			minsert(void **addr, int fit, size_t size);
+void			mcreate(void **addr, int fit, size_t size);
+void			*mfind(int fit, size_t size);
 
 /*
 void	free(void *ptr);
