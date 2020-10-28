@@ -12,3 +12,27 @@
 
 #include <malloc.h>
 
+extern t_arenadata	*g_memroot[3];
+
+int		rfind(t_arenadata **arena, t_chunkdata **chunk,\
+	t_chunkdata *adjacents, size_t size)
+{
+	
+}
+
+void	*realloc(void *ptr, size_t size)
+{
+	/*
+		/!\ 	new size < original size
+
+		if (!ptr)
+			just malloc
+		if (!size)
+			just free
+		find if adjecent part
+			if enough make copy
+		else
+			malloc
+			then copy
+	*/
+}

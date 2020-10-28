@@ -100,6 +100,52 @@ TINY : 0xA0000
 ...
 Total : 52698 octets
 */
+/*
+t_meach_fns		*meach_setfn_show()
+{
+	static t_meach_fns fns[5] = {
+		begin = 
+	}
+	return (fns);
+}
+
+void			miter_init(t_meach *meach, t_meach_fns *fns)
+{
+	meach->begin = fns[0];
+	meach->fit = fns[1];
+	meach->arena = fns[2];
+	meach->chunk = fns[3];
+	meach->end = fns[4];
+}
+
+int				miter(t_arenadata **arena, t_chunkdata **chunk, t_meach *meach, void *ptr)
+{
+	int			fit_id;
+
+	fit_id = 0;
+	meach->begin();
+	while (fit_id < 3)
+	{
+		(*arena) = g_memroot[fit_id];
+		meach->fit(*arena, *chunk, ptr);
+		while ((*arena))
+		{
+			(*chunk) = (*arena)->chunk;
+			meach->arena(*arena, *chunk, ptr);
+			while (*chunk)
+			{
+				if (meach->chunk(*arena, *chunk, ptr)
+					return (1);
+				(*chunk) = (*chunk)->next;
+			}
+			(*arena) = (*arena)->next;
+		}
+		fit_id += 1;
+	}
+	meach->end();
+	return (0);
+}
+*/
 void			show_alloc_mem(void)
 {
 	char		*fitname;
@@ -108,9 +154,9 @@ void			show_alloc_mem(void)
 	t_arenadata	*this_arena;
 	t_chunkdata	*this_chunk;
 
-	fitid = 0;
+	fit_id = 0;
 	total = 0;
-	while (fitid < 3)
+	while (fit_id < 3)
 	{
 		this_arena = g_memroot[fit_id];
 		printf("%s : %p\n", fit_getname(fit_id), this_arena);
@@ -132,18 +178,18 @@ void			show_alloc_mem(void)
 
 int		arena_create(t_arenadata **arena, t_chunkdata **chunk, int fitid)
 {
-	size_t	pagesize;
+	size_t	arenasize;
 	size_t	datalen;
 
-	pagesize = page_getsize(fitid);
+	arenasize = arena_getsize(fitid);
 	datalen = sizeof(t_arenadata) + sizeof(t_chunkdata);
-	*arena = (t_arenadata *)mmap(NULL, pagesize,
+	*arena = (t_arenadata *)mmap(NULL, arenasize,
 		PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANON, -1, 0);
 	if (!(*arena))
 		return (0);
 	ft_bzero(*arena, datalen);
 	*chunk = (t_chunkdata)((*arena) + sizeof(t_chunkdata));
-	(*chunk)->len = pagesize - datalen;
+	(*chunk)->len = arenasize - datalen;
 	(*arena)->free = *chunk;
 	return (1);
 }
